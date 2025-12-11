@@ -69,11 +69,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
-        <!-- ✅ Spring Messaging (for SimpMessagingTemplate, STOMP events, etc.) -->
+        <!-- ✅ Spring Messaging (for SimpMessagingTemplate, STOMP events, etc.) 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-messaging</artifactId>
-        </dependency>
+        </dependency>-->
 	</dependencies>
 
 	<build>
