@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<typeInfoHistroy>
+    <typeInfo handle="=lostFoundApplication/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.infosys.lostFoundApplication.dao{LostItemDao.java[LostItemDao" modifiers="513" timestamp="1764679944008"/>
+    <typeInfo handle="=lostFoundApplication/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.infosys.lostFoundApplication.dao{LostItemRepository.java[LostItemRepository" modifiers="513" timestamp="1764333638923"/>
+    <typeInfo handle="=lostFoundApplication/C:\/Users\/suren\/.m2\/repository\/org\/springframework\/spring-web\/6.2.12\/spring-web-6.2.12.jar=/maven.pomderived=/true=/=/maven.groupId=/org.springframework=/=/maven.artifactId=/spring-web=/=/maven.version=/6.2.12=/=/maven.scope=/compile=/=/maven.pomderived=/true=/&lt;org.springframework.web.client(RestClient.class[RestClient" modifiers="1537" timestamp="1763038509509"/>
+    <typeInfo handle="=lostFoundApplication/C:\/Users\/suren\/.m2\/repository\/org\/springframework\/data\/spring-data-jpa\/3.5.5\/spring-data-jpa-3.5.5.jar=/maven.pomderived=/true=/=/maven.groupId=/org.springframework.data=/=/maven.artifactId=/spring-data-jpa=/=/maven.version=/3.5.5=/=/maven.scope=/compile=/=/maven.pomderived=/true=/&lt;org.springframework.data.jpa.repository(JpaRepository.class[JpaRepository" modifiers="1537" timestamp="1763038507766"/>
+</typeInfoHistroy>
