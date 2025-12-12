@@ -57,6 +57,18 @@ export const getAllUsers = () => {
     });
 };
 
+export const getAllStudents = () => {
+    return axios.get(`${BASE_URL}/admin/users`, {
+        withCredentials: true
+    });
+}
+
+export const deleteUser = (username) => {
+    return axios.delete(`${BASE_URL}/admin/users/${username}`, {
+        withCredentials: true,
+    });
+};
+
 export const getCounts = () => {
     return axios.get(`${BASE_URL}/counts`, {
         withCredentials: true

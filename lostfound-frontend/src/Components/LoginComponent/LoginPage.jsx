@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import { validateUser } from '../../Services/LoginService';
-import '../../DisplayView.css';
+import { useNavigate } from "react-router-dom";
+import { validateUser } from "../../Services/LoginService";
+import "../../DisplayView.css";
 
 const LoginPage = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
@@ -13,27 +14,54 @@ const LoginPage = () => {
 
   const validateLogin = async (e) => {
     e.preventDefault();
-    try {
-      const response = await validateUser({
-        userId: loginData.username,
-        password: loginData.password
-      });
+    setLoading(true);
+    setErrors({}); 
 
-      let role = String(response.data);
-      if (role === "Admin") navigate('/AdminMenu');
-      else if (role === "Student") navigate('/StudentMenu');
-      else setErrors({ ...errors, general: "Wrong User ID or Password" });
+    try {
+      const payload = {
+        userId: loginData.username.trim(),
+        password: loginData.password,
+      };
+
+      const response = await validateUser(payload);
+
+       
+      const role =
+        typeof response?.data === "string"
+          ? response.data
+          : response?.data?.role || response?.data?.data; // fallback
+
+      if (role === "Admin") {
+        navigate("/AdminMenu");
+      } else if (role === "Student") {
+        navigate("/StudentMenu");
+      } else {
+      
+        setErrors({ general: "Login ID or Password is incorrect" });
+      }
     } catch (err) {
-      console.error(err);
-      setErrors({ ...errors, general: "Login failed. Please try again." });
+      
+      if (err?.response?.status === 401) {
+        setErrors({ general: "Login ID or Password is incorrect" });
+      } else if (err?.response?.data?.message) {
+        
+        setErrors({ general: err.response.data.message });
+      } else {
+        setErrors({
+          general: "Login failed. Please try again.",
+        });
+      }
+      console.error("Login error:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
-    setLoginData(values => ({ ...values, [name]: value }));
-    // Clear general error when user types
-    setErrors(prev => ({ ...prev, general: "" }));
+    setLoginData((values) => ({ ...values, [name]: value }));
+   
+    setErrors((prev) => ({ ...prev, [name]: "", general: "" }));
   };
 
   const handleValidation = (event) => {
@@ -52,13 +80,11 @@ const LoginPage = () => {
     }
 
     setErrors(tempErrors);
-    if (isValid) {
-      validateLogin(event);
-    }
+    if (isValid) validateLogin(event);
   };
 
   const registerNewUser = () => {
-    navigate('/Register');
+    navigate("/Register");
   };
 
   return (
@@ -75,6 +101,7 @@ const LoginPage = () => {
           bg-white backdrop-blur-xl border border-white/40
           shadow-[0_20px_35px_rgba(0,0,0,0.20)]
         "
+        aria-live="polite"
       >
         {/* Branding Inside Form */}
         <div className="text-center mb-5">
@@ -114,6 +141,7 @@ const LoginPage = () => {
               focus:outline-none focus:border-[#8c63ff]
               focus:shadow-[0_0_0_3px_rgba(140,99,255,0.25)]
             "
+            autoComplete="username"
           />
           {errors.username && (
             <p className="text-red-500 mt-1 text-sm">{errors.username}</p>
@@ -136,6 +164,7 @@ const LoginPage = () => {
               focus:outline-none focus:border-[#8c63ff]
               focus:shadow-[0_0_0_3px_rgba(140,99,255,0.25)]
             "
+            autoComplete="current-password"
           />
           {errors.password && (
             <p className="text-red-500 mt-1 text-sm">{errors.password}</p>
@@ -145,15 +174,17 @@ const LoginPage = () => {
         {/* LOGIN Button */}
         <button
           type="submit"
-          className="
+          disabled={loading}
+          className={`
             w-full py-2 rounded-lg mb-2 text-white text-[1rem] font-semibold uppercase tracking-wide
             bg-[linear-gradient(135deg,#667eea_0%,#764ba2_100%)]
             shadow-[0_4px_15px_rgba(102,126,234,0.35)]
             transition-all duration-300
             hover:-translate-y-1 hover:shadow-[0_10px_22px_rgba(102,126,234,0.5)]
-          "
+            ${loading ? "opacity-70 cursor-not-allowed" : ""}
+          `}
         >
-          Sign In
+          {loading ? "Signing in..." : "Sign In"}
         </button>
 
         {/* Divider */}

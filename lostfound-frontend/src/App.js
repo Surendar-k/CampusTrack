@@ -10,6 +10,7 @@ import FoundItemReport from "./Components/ItemComponent/FoundItemReport";
 import FoundItemEntry from "./Components/ItemComponent/FoundItemEntry";
 
 import ManagePosts from "./Components/ItemComponent/ManagePosts";
+import StudentList from "./Components/LoginComponent/StudentList";
 function App() {
   return (
     <div className="App">
@@ -24,6 +25,7 @@ function App() {
           <Route path="/found-report" element={<FoundItemReport />} />
           <Route path="/found-entry" element={<FoundItemEntry />} />
           <Route path="/post-report" element={<ManagePosts />} />
+          <Route path="/students" element={<StudentList />} />
         </Routes>
       </BrowserRouter>
     </div>

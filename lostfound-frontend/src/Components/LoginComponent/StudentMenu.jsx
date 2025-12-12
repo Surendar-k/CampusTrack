@@ -20,7 +20,7 @@ const StudentMenu = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 flex flex-col font-sans">
 
-      {/* 🔵🟣 Navbar with Gradient */}
+      
       <header
         className="flex items-center justify-between px-6 py-4 text-white shadow-lg mb-6"
         style={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}
@@ -36,7 +36,7 @@ const StudentMenu = () => {
 
       <div className="w-full max-w-[75%] mx-auto flex-1 flex flex-col justify-between">
 
-        {/* 🎨 Main Welcome Card (Gradient Applied) */}
+       
         <div
           className="relative rounded-2xl shadow-2xl p-16 text-center text-white mb-12 overflow-hidden scale-95"
           style={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}
@@ -66,10 +66,9 @@ const StudentMenu = () => {
           </div>
         </div>
 
-        {/* Dashboard Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
 
-          {/* View Items */}
+          
           <div
             onClick={() => navigate("/post-report")}
             className="bg-white p-6 rounded-xl shadow-lg text-center cursor-pointer transform transition duration-300 hover:shadow-2xl hover:-translate-y-1"
@@ -81,7 +80,7 @@ const StudentMenu = () => {
             <p className="text-gray-500 mb-3">Browse all lost & found posts</p>
           </div>
 
-          {/* Report Lost */}
+          
           <div
             onClick={() => navigate("/lost-entry")}
             className="bg-white p-6 rounded-xl shadow-lg text-center cursor-pointer transform transition duration-300 hover:shadow-2xl hover:-translate-y-1"
@@ -93,7 +92,7 @@ const StudentMenu = () => {
             <p className="text-gray-500 mb-3">Submit details of your lost item</p>
           </div>
 
-          {/* Report Found */}
+         
           <div
             onClick={() => navigate("/found-entry")}
             className="bg-white p-6 rounded-xl shadow-lg text-center cursor-pointer transform transition duration-300 hover:shadow-2xl hover:-translate-y-1"

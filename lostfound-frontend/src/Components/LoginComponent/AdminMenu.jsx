@@ -30,12 +30,12 @@ const AdminMenu = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 flex flex-col font-sans">
 
-      {/* 🔵🟣 Navbar with Your Gradient */}
+     
       <header
         className="flex items-center justify-between px-6 py-4 text-white shadow-lg mb-6"
         style={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}
       >
-        <h1 className="text-2xl font-bold">🎓 CampusTrack Admin</h1>
+        <h1 className="text-2xl font-bold">🎓 CampusTrack</h1>
         <button
           onClick={handleLogout}
           className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition"
@@ -97,7 +97,7 @@ const AdminMenu = () => {
 
           {/* User Management */}
           <div
-            onClick={() => navigate("/admin/user-management")}
+            onClick={() => navigate("/students")}
             className="bg-white p-6 rounded-xl shadow-lg text-center cursor-pointer transform transition duration-300 hover:shadow-2xl hover:-translate-y-1"
           >
             <div className="text-3xl mb-3">👥</div>

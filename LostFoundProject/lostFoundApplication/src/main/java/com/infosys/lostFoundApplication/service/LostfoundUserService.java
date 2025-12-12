@@ -1,5 +1,7 @@
 package com.infosys.lostFoundApplication.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -47,7 +49,15 @@ public class LostfoundUserService implements UserDetailsService{
 	public void save(LostfoundUser user1) {
 		repository.save(user1);
 	}
+	//get all students list
+	public List<LostfoundUser> getAllStudents(){
+		return repository.getAllStudents();}
 	
+	// Delete a user by username
+	public void deleteUser(String username) {
+	    repository.deleteById(username);
+	}
+
 	// validate an existing user from database
 		@Override
 		public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

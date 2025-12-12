@@ -34,7 +34,7 @@ const createNewUser = async (event) => {
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
     setLostFoundUser((values) => ({ ...values, [name]: value }));
-    // Clear general error while typing
+  
     setErrors((prev) => ({ ...prev, general: "" }));
   };
 
@@ -112,7 +112,7 @@ const createNewUser = async (event) => {
           New User Registration
         </h2>
 
-        {/* GENERAL ERROR */}
+  
      {/* SUCCESS MESSAGE */}
 {errors.success && (
   <div className="bg-gradient-to-r from-green-400 to-green-600

@@ -1,5 +1,6 @@
 package com.infosys.lostFoundApplication.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,9 +112,25 @@ public class LoginController {
     public String getRole() {
         return service.getRole();
     }
-    
-    
-    
+    //---Get List of Students----
+    @GetMapping("/students")
+    public List<LostfoundUser> getAllStudents(){
+    	return service.getAllStudents();
+    }
+    @DeleteMapping("/admin/users/{username}")
+    public ResponseEntity<String> deleteUser(@PathVariable String username) {
+
+        if (!"admin".equalsIgnoreCase(service.getRole())) {
+            return ResponseEntity.status(403).body("Access Denied: Only admin can delete users");
+        }
+
+        try {
+            repository.deleteById(username);
+            return ResponseEntity.ok("User deleted successfully");
+        } catch (Exception ex) {
+            return ResponseEntity.status(500).body("Error deleting user: " + ex.getMessage());
+        }
+    }
  // -------------------- ADMIN: GET ALL USERS --------------------
     @GetMapping("/admin/users")
     public ResponseEntity<?> getAllUsers() {
