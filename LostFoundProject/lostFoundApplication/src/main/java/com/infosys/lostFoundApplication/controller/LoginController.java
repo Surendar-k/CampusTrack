@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import com.infosys.lostFoundApplication.bean.LostfoundUser;
+import com.infosys.lostFoundApplication.dao.LostfoundUserRepository;
 import com.infosys.lostFoundApplication.service.LostfoundUserService;
 
 import jakarta.servlet.http.Cookie;
@@ -25,6 +26,9 @@ public class LoginController {
 
     @Autowired
     private LostfoundUserService service;
+    
+    @Autowired
+    private LostfoundUserRepository repository;
 
     @Autowired
     private PasswordEncoder passwordEncoder; // Encode passwords
@@ -106,5 +110,19 @@ public class LoginController {
     @GetMapping("/role")
     public String getRole() {
         return service.getRole();
+    }
+    
+    
+    
+ // -------------------- ADMIN: GET ALL USERS --------------------
+    @GetMapping("/admin/users")
+    public ResponseEntity<?> getAllUsers() {
+
+        // Only allow admin
+        if (!"admin".equalsIgnoreCase(service.getRole())) {
+            return ResponseEntity.status(403).body("Access Denied: Only admin can view all users");
+        }
+
+        return ResponseEntity.ok(repository.findAll());
     }
 }

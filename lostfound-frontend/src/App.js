@@ -8,6 +8,8 @@ import LostItemEntry from "./Components/ItemComponent/LostItemEntry";
 import LostItemReport from "./Components/ItemComponent/LostItemReport";
 import FoundItemReport from "./Components/ItemComponent/FoundItemReport";
 import FoundItemEntry from "./Components/ItemComponent/FoundItemEntry";
+
+import ManagePosts from "./Components/ItemComponent/ManagePosts";
 function App() {
   return (
     <div className="App">
@@ -21,6 +23,7 @@ function App() {
           <Route path="/lost-report" element={<LostItemReport />} />
           <Route path="/found-report" element={<FoundItemReport />} />
           <Route path="/found-entry" element={<FoundItemEntry />} />
+          <Route path="/post-report" element={<ManagePosts />} />
         </Routes>
       </BrowserRouter>
     </div>

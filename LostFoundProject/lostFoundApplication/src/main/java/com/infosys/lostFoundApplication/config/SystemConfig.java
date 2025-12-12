@@ -36,6 +36,11 @@ public class SystemConfig {
 	            .requestMatchers("/lostfound/login/**").permitAll()
 	            .requestMatchers("/lostfound/logout").permitAll()
 	            .requestMatchers("/lostfound/**").permitAll()
+	            .requestMatchers("/lostfound/admin/**").hasAuthority("admin")
+
+	            
+	            // Admin-only endpoints
+                .requestMatchers("/lostfound/admin/**").hasAuthority("admin")
 	            .anyRequest().authenticated()
 	      )
 	      .logout(logout -> logout

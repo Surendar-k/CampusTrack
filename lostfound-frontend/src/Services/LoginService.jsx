@@ -51,3 +51,16 @@ export const logoutUser = () => {
     });
 };
 
+export const getAllUsers = () => {
+    return axios.get(`${BASE_URL}/admin/users`, {
+        withCredentials: true
+    });
+};
+
+export const getCounts = () => {
+    return axios.get(`${BASE_URL}/counts`, {
+        withCredentials: true
+    });
+};
+
+

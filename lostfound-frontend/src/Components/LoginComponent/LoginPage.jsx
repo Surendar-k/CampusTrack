@@ -3,166 +3,177 @@ import { useNavigate } from 'react-router-dom';
 import { validateUser } from '../../Services/LoginService';
 import '../../DisplayView.css';
 
- const LoginPage=()=> {
-    let navigate=useNavigate();
+const LoginPage = () => {
+  let navigate = useNavigate();
   const [errors, setErrors] = useState({});
-  const [loginData, setLoginData] =useState ({
+  const [loginData, setLoginData] = useState({
     username: "",
     password: "",
   });
- const validateLogin = (e) => {
+
+  const validateLogin = async (e) => {
     e.preventDefault();
-    // Send as an object { userId, password } to match backend
-    validateUser({
+    try {
+      const response = await validateUser({
         userId: loginData.username,
         password: loginData.password
-    }).then((response) => {
-        let role = String(response.data);
-        if (role === "Admin")
-            navigate('/AdminMenu');
-        else if (role === "Student")
-            navigate('/StudentMenu');
-        else
-            alert("Wrong Userid/Password");
-    }).catch(err => {
-        console.error(err);
-        alert("Login failed. Check console for details.");
-    });
-};
+      });
 
-const  onChangeHandler = (event) =>{
-    event.persist();
-    const name = event.target.name;
-    const value = event.target.value;
-    setLoginData(values =>({...values, [name]: value }));
-};
+      let role = String(response.data);
+      if (role === "Admin") navigate('/AdminMenu');
+      else if (role === "Student") navigate('/StudentMenu');
+      else setErrors({ ...errors, general: "Wrong User ID or Password" });
+    } catch (err) {
+      console.error(err);
+      setErrors({ ...errors, general: "Login failed. Please try again." });
+    }
+  };
 
-const handleValidation = (event) => {
+  const onChangeHandler = (event) => {
+    const { name, value } = event.target;
+    setLoginData(values => ({ ...values, [name]: value }));
+    // Clear general error when user types
+    setErrors(prev => ({ ...prev, general: "" }));
+  };
+
+  const handleValidation = (event) => {
     event.preventDefault();
     let tempErrors = {};
     let isValid = true;
- 
+
     if (!loginData.username.trim()) {
       tempErrors.username = "User Name is required";
       isValid = false;
     }
- 
+
     if (!loginData.password.trim()) {
       tempErrors.password = "Password is required";
       isValid = false;
     }
- 
+
     setErrors(tempErrors);
     if (isValid) {
       validateLogin(event);
     }
   };
-  const registerNewUser=(e)=>{
+
+  const registerNewUser = () => {
     navigate('/Register');
-}
+  };
 
+  return (
+    <div
+      className="
+        min-h-screen flex flex-col justify-center items-center px-5 relative
+        bg-gradient-to-br from-[#667eea] to-[#764ba2] font-[Segoe_UI]
+      "
+    >
+      <form
+        onSubmit={handleValidation}
+        className="
+          w-full max-w-lg p-8 rounded-2xl
+          bg-white backdrop-blur-xl border border-white/40
+          shadow-[0_20px_35px_rgba(0,0,0,0.20)]
+        "
+      >
+        {/* Branding Inside Form */}
+        <div className="text-center mb-5">
+          <h1 className="text-[2rem] font-bold text-[#333] tracking-wide">
+            🎓 CampusTrack
+          </h1>
+          <p className="text-gray-600 italic text-[0.95rem] mt-1">
+            Helping you reunite with what matters most.
+          </p>
+        </div>
 
-return (
-  <div className="flex justify-center items-center h-screen 
-      bg-gradient-to-br from-[#8c63ff] to-[#c1a3ff] 
-      p-5 relative font-[Segoe_UI]">
+        {/* Heading */}
+        <h2 className="text-center text-[1.4rem] mb-2 font-semibold text-[#4a4a4a]">
+          Welcome Back
+        </h2>
 
-    {/* App Name & Quote */}
-    <div className="absolute top-10 w-full text-center text-white">
-      <h1 className="font-bold tracking-[2px] text-[2.5rem]">
-        Lost & Found App
-      </h1>
-      <p className="opacity-85 italic text-[1.1rem]">
-        Helping you reunite with what matters most.
-      </p>
-    </div>
+        {/* GENERAL ERROR BELOW HEADING */}
+        {errors.general && (
+          <div className="bg-gradient-to-r from-[#ff6b6b] to-[#ee5a52] text-white p-2 rounded-lg mb-4 text-center font-medium shadow-[0_4px_12px_rgba(255,107,107,0.3)]">
+            {errors.general}
+          </div>
+        )}
 
-    {/* Login Card */}
-    <div className="w-[420px] p-6 rounded-[20px] 
-        bg-white/85 backdrop-blur-md 
-        border border-violet-400/30 
-        shadow-[0_8px_30px_rgba(140,99,255,0.3)] z-10">
-
-      <h3 className="text-center mb-4 font-bold text-xl text-[#6b3cbf]">
-        User Login
-      </h3>
-
-      <form>
         {/* Username */}
         <div className="mb-3">
-          <label className="font-semibold text-[#6b3cbf] block mb-1">
-            Username
-          </label>
-
           <input
             type="text"
             name="username"
-            placeholder="Enter username"
+            placeholder="Enter your username"
             value={loginData.username}
             onChange={onChangeHandler}
-            className="w-full p-2.5 rounded-[10px]
-              bg-[#8c63ff0d] text-[#4b2fa3] 
-              border border-[#8c63ff4d] 
-              outline-none"
+            className="
+              w-full p-2 rounded-lg border border-gray-300 bg-white
+              text-gray-700 text-[0.95rem]
+              placeholder:text-gray-350
+              transition-all duration-300
+              focus:outline-none focus:border-[#8c63ff]
+              focus:shadow-[0_0_0_3px_rgba(140,99,255,0.25)]
+            "
           />
           {errors.username && (
-            <p className="text-red-500 mt-1">{errors.username}</p>
+            <p className="text-red-500 mt-1 text-sm">{errors.username}</p>
           )}
         </div>
 
         {/* Password */}
         <div className="mb-3">
-          <label className="font-semibold text-[#6b3cbf] block mb-1">
-            Password
-          </label>
-
           <input
             type="password"
             name="password"
-            placeholder="Enter password"
+            placeholder="Enter your password"
             value={loginData.password}
             onChange={onChangeHandler}
-            className="w-full p-2.5 rounded-[10px]
-              bg-[#8c63ff0d] text-[#4b2fa3] 
-              border border-[#8c63ff4d] 
-              outline-none"
+            className="
+              w-full p-2 rounded-lg border border-gray-300 bg-white
+              text-gray-700 text-[0.95rem]
+              placeholder:text-gray-350
+              transition-all duration-300
+              focus:outline-none focus:border-[#8c63ff]
+              focus:shadow-[0_0_0_3px_rgba(140,99,255,0.25)]
+            "
           />
           {errors.password && (
-            <p className="text-red-500 mt-1">{errors.password}</p>
+            <p className="text-red-500 mt-1 text-sm">{errors.password}</p>
           )}
         </div>
 
-        {/* Login Button */}
+        {/* LOGIN Button */}
         <button
-          onClick={handleValidation}
-          className="w-full py-2 font-bold rounded-[12px]
-            text-white 
-            bg-gradient-to-r from-[#8c63ff] to-[#b388ff]
-            shadow-[0_4px_15px_rgba(140,99,255,0.4)]
-            tracking-[1px]"
+          type="submit"
+          className="
+            w-full py-2 rounded-lg mb-2 text-white text-[1rem] font-semibold uppercase tracking-wide
+            bg-[linear-gradient(135deg,#667eea_0%,#764ba2_100%)]
+            shadow-[0_4px_15px_rgba(102,126,234,0.35)]
+            transition-all duration-300
+            hover:-translate-y-1 hover:shadow-[0_10px_22px_rgba(102,126,234,0.5)]
+          "
         >
-          Login
+          Sign In
         </button>
+
+        {/* Divider */}
+        <div className="border-t border-gray-300 my-4"></div>
+
+        {/* Register Link */}
+        <div className="text-center">
+          <p className="text-gray-700 font-medium text-[0.95rem]">
+            New to CampusTrack?{" "}
+            <span
+              onClick={registerNewUser}
+              className="text-[#8c63ff] font-semibold cursor-pointer hover:underline"
+            >
+              Create your account
+            </span>
+          </p>
+        </div>
       </form>
-
-      {/* Divider */}
-      <div className="my-4 border-t border-violet-400/30"></div>
-
-      {/* Register Button */}
-      <button
-        onClick={registerNewUser}
-        className="w-full py-2 font-bold rounded-[12px]
-          border border-[#8c63ff] 
-          text-[#6b3cbf]
-          bg-transparent"
-      >
-        Register New User
-      </button>
     </div>
-  </div>
-);
+  );
+};
 
-
-
-}
 export default LoginPage;
