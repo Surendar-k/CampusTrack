@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { FaBoxOpen, FaSearch, FaEdit, FaSignOutAlt } from "react-icons/fa";
+import { FaBoxOpen, FaSearch, FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { logoutUser, getUserDetails } from "../../Services/LoginService";
+import Navbar from "../Layout/Navbar";
+import { getUserDetails } from "../../Services/LoginService";
 
 const StudentMenu = () => {
   const navigate = useNavigate();
@@ -13,30 +14,16 @@ const StudentMenu = () => {
       .catch(err => console.error("Error fetching current user:", err));
   }, []);
 
-  const handleLogout = () => {
-    logoutUser().then(() => navigate("/"));
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 flex flex-col font-sans">
 
-      
-      <header
-        className="flex items-center justify-between px-6 py-4 text-white shadow-lg mb-6"
-        style={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}
-      >
-        <h1 className="text-2xl font-bold">🎓 CampusTrack</h1>
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition"
-        >
-          <FaSignOutAlt /> Logout
-        </button>
-      </header>
+      {/* ✅ Common Navbar */}
+      <Navbar />
 
+      {/* Main Content */}
       <div className="w-full max-w-[75%] mx-auto flex-1 flex flex-col justify-between">
 
-       
+        {/* Welcome Card */}
         <div
           className="relative rounded-2xl shadow-2xl p-16 text-center text-white mb-12 overflow-hidden scale-95"
           style={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}
@@ -49,59 +36,62 @@ const StudentMenu = () => {
               <span className="text-6xl">🎓</span>
             </div>
 
-            <h1 className="text-5xl font-bold mb-2 drop-shadow-md">Welcome Student!</h1>
+            <h1 className="text-5xl font-bold mb-2 drop-shadow-md">
+              Welcome Student!
+            </h1>
 
             <p className="text-xl mb-6 opacity-90">
               Track and report lost & found items easily
             </p>
 
-            <div className="inline-block bg-white/15 py-2 px-8 rounded-full backdrop-blur-md">
-              <p className="text-lg font-medium">
+            <div className="inline-block bg-white/15 py-2 px-8 rounded-full backdrop-blur-md text-center">
+              <p className="text-lg font-medium py-2">
                 Username: <strong>{currentUser?.username || "student"}</strong>
               </p>
-              <p className="text-lg font-medium">
+              {/* <p className="text-lg font-medium">
                 Email: <strong>{currentUser?.email || "student@example.com"}</strong>
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
 
+        {/* Action Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
 
-          
+          {/* View Items */}
           <div
             onClick={() => navigate("/post-report")}
             className="bg-white p-6 rounded-xl shadow-lg text-center cursor-pointer transform transition duration-300 hover:shadow-2xl hover:-translate-y-1"
           >
-            <div className="text-3xl mb-3">
+            <div className="text-3xl mb-3 text-purple-600">
               <FaSearch />
             </div>
             <h3 className="text-lg font-semibold mb-1">View Items</h3>
-            <p className="text-gray-500 mb-3">Browse all lost & found posts</p>
+            <p className="text-gray-500">Browse all lost & found posts</p>
           </div>
 
-          
+          {/* Report Lost */}
           <div
             onClick={() => navigate("/lost-entry")}
             className="bg-white p-6 rounded-xl shadow-lg text-center cursor-pointer transform transition duration-300 hover:shadow-2xl hover:-translate-y-1"
           >
-            <div className="text-3xl mb-3">
+            <div className="text-3xl mb-3 text-blue-600">
               <FaEdit />
             </div>
             <h3 className="text-lg font-semibold mb-1">Report Lost</h3>
-            <p className="text-gray-500 mb-3">Submit details of your lost item</p>
+            <p className="text-gray-500">Submit details of your lost item</p>
           </div>
 
-         
+          {/* Report Found */}
           <div
             onClick={() => navigate("/found-entry")}
             className="bg-white p-6 rounded-xl shadow-lg text-center cursor-pointer transform transition duration-300 hover:shadow-2xl hover:-translate-y-1"
           >
-            <div className="text-3xl mb-3">
+            <div className="text-3xl mb-3 text-green-600">
               <FaBoxOpen />
             </div>
             <h3 className="text-lg font-semibold mb-1">Report Found</h3>
-            <p className="text-gray-500 mb-3">Submit an item you found on campus</p>
+            <p className="text-gray-500">Submit an item you found on campus</p>
           </div>
 
         </div>

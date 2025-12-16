@@ -30,21 +30,21 @@ export const getUserDetails = () => {
     });
 };
 
-// -------------------- GET USER ID --------------------
+
 export const getUserId = () => {
     return axios.get(USER_URL, {
         withCredentials: true
     });
 };
 
-// -------------------- GET ROLE --------------------
+
 export const getRole = () => {
     return axios.get(ROLE_URL, {
         withCredentials: true
     });
 };
 
-// -------------------- LOGOUT --------------------
+
 export const logoutUser = () => {
     return axios.post(LOGOUT_URL, {}, {
         withCredentials: true

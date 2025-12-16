@@ -1,58 +1,49 @@
-import React, { useState, useEffect } from "react";
-import { FaSignOutAlt } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { logoutUser, getAllUsers, getCounts, getUserDetails } from "../../Services/LoginService";
+import Navbar from "../Layout/Navbar";
+import { getAllUsers, getCounts, getUserDetails } from "../../Services/LoginService";
 
 const AdminMenu = () => {
   const navigate = useNavigate();
+
   const [lostCount, setLostCount] = useState(0);
   const [foundCount, setFoundCount] = useState(0);
   const [userCount, setUserCount] = useState(0);
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
+    // Lost & Found counts
     getCounts().then(res => {
       setLostCount(res.data.lost);
       setFoundCount(res.data.found);
     });
 
-    getAllUsers().then(res => setUserCount(res.data.length));
+    // User count
+    getAllUsers().then(res => {
+      setUserCount(res.data.length);
+    });
 
-    getUserDetails().then(res => setCurrentUser(res.data));
+    // Logged in user details
+    getUserDetails().then(res => {
+      setCurrentUser(res.data);
+    });
   }, []);
 
-  const handleLogout = () => {
-    logoutUser().then(() => {
-      navigate("/");
-    });
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-100 font-sans flex flex-col">
 
-     
-      <header
-        className="flex items-center justify-between px-6 py-4 text-white shadow-lg mb-6"
-        style={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}
-      >
-        <h1 className="text-2xl font-bold">🎓 CampusTrack</h1>
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition"
-        >
-          <FaSignOutAlt /> Logout
-        </button>
-      </header>
+      {/* ✅ Common Dynamic Navbar */}
+      <Navbar />
 
-      {/* Main Content Container */}
-      <div className="w-full max-w-[75%] mx-auto flex-1 flex flex-col justify-between">
+      {/* Main Content */}
+      <div className="w-full max-w-[75%] mx-auto flex-1 flex flex-col">
 
-        {/* 🎨 Main Welcome Card (Gradient Applied) */}
+        {/* Welcome Card */}
         <div
-          className="relative rounded-2xl shadow-2xl p-16 text-center text-white mb-12 overflow-hidden scale-95"
+          className="relative rounded-2xl shadow-2xl p-14 text-center text-white mb-12 overflow-hidden scale-95"
           style={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}
         >
-          {/* Decorative circles */}
+          {/* Decorative elements */}
           <div className="absolute -top-16 -right-16 w-72 h-72 bg-white/10 rounded-full"></div>
           <div className="absolute -bottom-12 -left-12 w-56 h-56 bg-white/5 rounded-full"></div>
 
@@ -69,13 +60,13 @@ const AdminMenu = () => {
               Intelligent Lost and Found Locator for Your Campus
             </p>
 
-            <div className="inline-block bg-white/15 py-2 px-8 rounded-full backdrop-blur-md">
-              <p className="text-lg font-medium">
+            <div className="inline-block bg-white/15 py-2 px-8 rounded-full backdrop-blur-md text-center ">
+              <p className="text-lg font-medium py-2">
                 Username: <strong>{currentUser?.username || "ADMIN"}</strong>
               </p>
-              <p className="text-lg font-medium">
+              {/* <p className="text-lg font-medium">
                 Email: <strong>{currentUser?.email || "admin@example.com"}</strong>
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
@@ -103,7 +94,9 @@ const AdminMenu = () => {
             <div className="text-3xl mb-3">👥</div>
             <h3 className="text-lg font-semibold mb-1">User Management</h3>
             <p className="text-gray-500 mb-3">Manage student accounts</p>
-            <p className="font-bold text-green-600">Total Users: {userCount}</p>
+            <p className="font-bold text-green-600">
+              Total Users: {userCount}
+            </p>
           </div>
 
           {/* Chat */}
@@ -114,10 +107,10 @@ const AdminMenu = () => {
             <div className="text-3xl mb-3">💬</div>
             <h3 className="text-lg font-semibold mb-1">Chat</h3>
             <p className="text-gray-500 mb-3">Communicate with students</p>
-            <p className="font-bold text-red-600">-- Messages</p>
+            <p className="font-bold text-red-600">Messages</p>
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
   );

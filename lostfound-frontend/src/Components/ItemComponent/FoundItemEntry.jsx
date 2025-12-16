@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   FaBoxOpen, FaEdit, FaCalendarAlt, FaMapMarkerAlt, 
-  FaTag, FaPalette, FaTrademark, FaSignOutAlt 
+  FaTag, FaPalette, FaTrademark 
 } from "react-icons/fa";
-import { getUserId, logoutUser } from '../../Services/LoginService';
+import { getUserId } from '../../Services/LoginService';
 import { generateId, saveFoundItem } from '../../Services/FoundItemService';
+import Navbar from '../Layout/Navbar';
 import '../../DisplayView.css';
 
 const FoundItemEntry = () => {
@@ -84,26 +85,11 @@ const FoundItemEntry = () => {
 
   const returnBack = () => navigate("/StudentMenu");
 
-  const handleLogout = () => {
-    logoutUser().then(() => navigate("/"));
-  };
-
   return (
-    <div className="min-h-screen font-sans bg-gradient-to-br from-gray-100 to-blue-100" >
-
+    <div className="min-h-screen font-sans bg-gradient-to-br from-gray-100 to-blue-100">
+      
       {/* Navbar */}
-      <header
-        className="flex items-center justify-between px-6 py-4 text-white shadow-lg mb-6"
-        style={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}
-      >
-        <h1 className="text-2xl font-bold">🎓 CampusTrack</h1>
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition"
-        >
-          <FaSignOutAlt /> Logout
-        </button>
-      </header>
+      <Navbar />
 
       {/* Form Container */}
       <div className="flex items-center justify-center p-4">

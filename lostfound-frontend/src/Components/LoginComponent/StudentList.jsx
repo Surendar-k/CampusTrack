@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FaUserGraduate, FaEnvelope, FaUser, FaShieldAlt, FaTrash, FaSignOutAlt } from "react-icons/fa";
+import { FaUserGraduate, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { getAllStudents, getRole, deleteUser, logoutUser } from "../../Services/LoginService";
+import Navbar from "../Layout/Navbar";
+import { getAllStudents, getRole, deleteUser } from "../../Services/LoginService";
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
@@ -10,17 +11,15 @@ const StudentList = () => {
   const [confirmDelete, setConfirmDelete] = useState({ show: false, username: "" });
   const navigate = useNavigate();
 
-  // Load role from backend
   const loadRole = async () => {
     try {
       const res = await getRole();
-      setRole(res.data); // assuming res.data is "Admin" or "Student"
+      setRole(res.data); 
     } catch (err) {
       console.error("Error fetching role:", err);
     }
   };
 
-  // Load students
   const loadStudents = async () => {
     try {
       const response = await getAllStudents();
@@ -35,19 +34,16 @@ const StudentList = () => {
     loadStudents();
   }, []);
 
-  // Show confirmation modal
   const handleDeleteClick = (username) => {
     setConfirmDelete({ show: true, username });
   };
 
-  // Confirm delete
   const handleConfirmDelete = async () => {
     try {
       await deleteUser(confirmDelete.username);
-      setStudents(students.filter((s) => s.username !== confirmDelete.username)); // remove from UI
+      setStudents(students.filter((s) => s.username !== confirmDelete.username));
       setSuccessMsg(`User '${confirmDelete.username}' deleted successfully!`);
       setConfirmDelete({ show: false, username: "" });
-
       setTimeout(() => setSuccessMsg(""), 3000);
     } catch (err) {
       console.error("Error deleting user:", err);
@@ -56,39 +52,17 @@ const StudentList = () => {
     }
   };
 
-  // Cancel delete
   const handleCancelDelete = () => {
     setConfirmDelete({ show: false, username: "" });
   };
 
-  // Logout handler
-  const handleLogout = () => {
-    logoutUser().then(() => {
-      navigate("/");
-    });
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* ✅ Navbar */}
+      <Navbar />
 
-      {/* NAVBAR */}
-      <header
-        className="flex items-center justify-between px-6 py-4 text-white shadow-lg"
-        style={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}
-      >
-        <h1 className="text-2xl font-bold">🎓 CampusTrack</h1>
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition"
-        >
-          <FaSignOutAlt /> Logout
-        </button>
-      </header>
-
-      <div className="p-10 flex justify-center bg-gradient-to-br from-gray-100 to-blue-100"
-    >
-        <div className="w-full max-w-6xl bg-white/95 rounded-3xl shadow-2xl p-10 mt-6 backdrop-blur-md border border-white/40"
-        >
+      <div className="p-10 flex justify-center bg-gradient-to-br from-gray-100 to-blue-100">
+        <div className="w-full max-w-6xl bg-white/95 rounded-3xl shadow-2xl p-10 mt-6 backdrop-blur-md border border-white/40">
 
           {/* Title */}
           <h2 className="text-4xl font-extrabold text-center text-purple-700 mb-4 flex items-center justify-center gap-3">
@@ -173,7 +147,9 @@ const StudentList = () => {
           <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
             <div className="bg-white rounded-xl p-8 shadow-2xl w-96 text-center">
               <h3 className="text-xl font-bold mb-4">Confirm Delete</h3>
-              <p className="mb-6">Are you sure you want to delete <strong>{confirmDelete.username}</strong>?</p>
+              <p className="mb-6">
+                Are you sure you want to delete <strong>{confirmDelete.username}</strong>?
+              </p>
               <div className="flex justify-center gap-4">
                 <button
                   onClick={handleConfirmDelete}
@@ -191,7 +167,6 @@ const StudentList = () => {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );

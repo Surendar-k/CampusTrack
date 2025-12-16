@@ -1,31 +1,28 @@
+// src/Components/ItemComponent/ManagePosts.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LostItemReport from "./LostItemReport";
 import FoundItemReport from "./FoundItemReport";
+import Navbar from "../Layout/Navbar";
 
 const ManagePosts = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("lost");
 
-  const returnBack = () => {
-    navigate(-1);
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
-      
-      {/* Navbar */}
-      <nav
-        className="text-white px-6 py-4 flex justify-between items-center shadow-lg"
+      {/* Use the common Navbar */}
+      <Navbar />
+
+      {/* Page Content */}
+      <div
+        className="p-6 rounded-2xl mt-6 mx-6"
         style={{
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          background: "linear-gradient(135deg, #d3d7e6ff 0%, #c6b8d4ff 100%)",
         }}
       >
-        {/* Left: App Name */}
-        <div className="text-2xl font-bold">CampusTrack</div>
-
-        {/* Right: Tabs */}
-        <div className="flex gap-4">
+        {/* Tabs */}
+        <div className="flex gap-4 mb-6">
           <button
             className={`px-6 py-2 rounded-2xl font-semibold transition ${
               activeTab === "lost"
@@ -48,18 +45,10 @@ const ManagePosts = () => {
             Found Items
           </button>
         </div>
-      </nav>
 
-      {/* Page Content */}
-     <div
-  className="p-6 rounded-2xl"
-  style={{
-    background: "linear-gradient(135deg, #d3d7e6ff 0%, #c6b8d4ff 100%)",
-  }}
->
-  {activeTab === "lost" ? <LostItemReport /> : <FoundItemReport />}
-</div>
-
+        {/* Render selected tab */}
+        {activeTab === "lost" ? <LostItemReport /> : <FoundItemReport />}
+      </div>
     </div>
   );
 };
