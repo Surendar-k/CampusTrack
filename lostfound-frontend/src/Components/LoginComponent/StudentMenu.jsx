@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaBoxOpen, FaSearch, FaEdit } from "react-icons/fa";
+import { FaBoxOpen, FaSearch, FaEdit, FaComments } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Layout/Navbar";
 import { getUserDetails } from "../../Services/LoginService";
@@ -48,15 +48,12 @@ const StudentMenu = () => {
               <p className="text-lg font-medium py-2">
                 Username: <strong>{currentUser?.username || "student"}</strong>
               </p>
-              {/* <p className="text-lg font-medium">
-                Email: <strong>{currentUser?.email || "student@example.com"}</strong>
-              </p> */}
             </div>
           </div>
         </div>
 
         {/* Action Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-12">
 
           {/* View Items */}
           <div
@@ -92,6 +89,18 @@ const StudentMenu = () => {
             </div>
             <h3 className="text-lg font-semibold mb-1">Report Found</h3>
             <p className="text-gray-500">Submit an item you found on campus</p>
+          </div>
+
+          {/* Chat Messages */}
+          <div
+            onClick={() => navigate("/chat-msg")}
+            className="bg-white p-6 rounded-xl shadow-lg text-center cursor-pointer transform transition duration-300 hover:shadow-2xl hover:-translate-y-1"
+          >
+            <div className="text-3xl mb-3 text-yellow-600">
+              <FaComments />
+            </div>
+            <h3 className="text-lg font-semibold mb-1">Chat Messages</h3>
+            <p className="text-gray-500">Open the chat interface</p>
           </div>
 
         </div>

@@ -101,7 +101,7 @@ const AdminMenu = () => {
 
           {/* Chat */}
           <div
-            onClick={() => navigate("/chat")}
+            onClick={() => navigate("/chat-msg")}
             className="bg-white p-6 rounded-xl shadow-lg text-center cursor-pointer transform transition duration-300 hover:shadow-2xl hover:-translate-y-1"
           >
             <div className="text-3xl mb-3">💬</div>

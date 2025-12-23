@@ -7,6 +7,7 @@ const ROLE_URL = `${BASE_URL}/role`;
 const USER_URL = `${BASE_URL}/user`;
 const LOGOUT_URL = `${BASE_URL}/logout`;
 
+
 // -------------------- REGISTER --------------------
 export const registerNewUser = (user) => {
     // user = { userId: "john", password: "1234", otherFields... }
@@ -74,5 +75,4 @@ export const getCounts = () => {
         withCredentials: true
     });
 };
-
 
