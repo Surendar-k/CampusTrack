@@ -12,6 +12,7 @@ import FoundItemEntry from "./Components/ItemComponent/FoundItemEntry";
 import ManagePosts from "./Components/ItemComponent/ManagePosts";
 import StudentList from "./Components/LoginComponent/StudentList";
 import ChatMessage from "./Components/MessageComponent/ChatMessage";
+import MatchedItemList from "./Components/ItemComponent/MatchedItemList";
 
 // Component to wrap Routes and scroll to top on route change
 const ScrollWrapper = ({ children }) => {
@@ -43,6 +44,7 @@ function App() {
           <Route path="/post-report" element={<ManagePosts />} />
           <Route path="/chat-msg" element={<ChatMessage />} />
           <Route path="/students" element={<StudentList />} />
+          <Route path="/matched-items" element={<MatchedItemList />} />
         </Routes>
       </ScrollWrapper>
     </BrowserRouter>

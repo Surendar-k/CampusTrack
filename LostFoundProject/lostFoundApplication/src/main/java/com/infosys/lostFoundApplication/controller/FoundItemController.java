@@ -5,7 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.infosys.lostFoundApplication.bean.FoundItem;
+import com.infosys.lostFoundApplication.bean.FoundItemDTO;
+import com.infosys.lostFoundApplication.bean.LostItem;
 import com.infosys.lostFoundApplication.dao.FoundItemDao;
+import com.infosys.lostFoundApplication.dao.LostItemDao;
 import com.infosys.lostFoundApplication.service.FoundItemService;
 import com.infosys.lostFoundApplication.service.LostfoundUserService;
 
@@ -14,6 +17,9 @@ import com.infosys.lostFoundApplication.service.LostfoundUserService;
 @CrossOrigin(origins = "http://localhost:3535", allowCredentials = "true")
 public class FoundItemController {
 
+	@Autowired
+	private LostItemDao lostItemDao;
+	
     @Autowired
     private FoundItemDao foundItemDao;
 
@@ -23,6 +29,7 @@ public class FoundItemController {
     @Autowired
     private LostfoundUserService userService;
 
+    
     @PostMapping("/found")
     public void saveFoundItem(@RequestBody FoundItem foundItem) {
         foundItemDao.saveFoundItem(foundItem);
@@ -57,5 +64,11 @@ public class FoundItemController {
     public List<FoundItem> getFoundItemsByUsername() {
         String userId = userService.getUserId();
         return foundItemDao.getFoundItemsByUsername(userId);
+    }
+    @GetMapping("/found-id/{id}")
+    public List<FoundItemDTO> getFoundItemsByLostItem(@PathVariable String id){
+    	LostItem lostItem=lostItemDao.getLostItemById(id);
+    	return foundItemService.collectFoundItems(lostItem);
+    	
     }
 }

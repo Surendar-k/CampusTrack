@@ -57,7 +57,6 @@ public class LostfoundUserService implements UserDetailsService{
 	public void deleteUser(String username) {
 	    repository.deleteById(username);
 	}
-
 	// validate an existing user from database
 		@Override
 		public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -66,7 +65,4 @@ public class LostfoundUserService implements UserDetailsService{
 			this.role=user.getRole();
 			return this.user;
 		}
-	 
-	
-
 }
