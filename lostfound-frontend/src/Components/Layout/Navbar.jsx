@@ -3,6 +3,7 @@ import { FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logoutUser, getUserDetails } from "../../Services/LoginService";
 
+
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,65 +30,62 @@ const Navbar = () => {
   };
 
   // Admin Links
-  const renderAdminLinks = () => {
-    const path = location.pathname;
-    if (path === "/AdminMenu") return null;
+const renderAdminLinks = () => {
+  const path = location.pathname;
+  if (path === "/AdminMenu") return null;
 
-    if (path === "/post-report") {
-      return (
-        <>
-          <button
-            onClick={() => navigate("/AdminMenu")}
-            className="px-4 py-2 rounded-lg bg-white/20 backdrop-blur-md hover:bg-white/30 text-white font-medium transition"
-          >
-            Admin Menu
-          </button>
-          <button
-            onClick={() => navigate("/students")}
-            className="px-4 py-2 rounded-lg bg-white/20 backdrop-blur-md hover:bg-white/30 text-white font-medium transition"
-          >
-            Users
-          </button>
-        </>
-      );
-    }
-
-    if (path === "/students") {
-      return (
-        <>
-          <button
-            onClick={() => navigate("/AdminMenu")}
-            className="px-4 py-2 rounded-lg bg-white/20 backdrop-blur-md hover:bg-white/30 text-white font-medium transition"
-          >
-            Admin Menu
-          </button>
-          <button
-            onClick={() => navigate("/post-report")}
-            className="px-4 py-2 rounded-lg bg-white/20 backdrop-blur-md hover:bg-white/30 text-white font-medium transition"
-          >
-            Manage Posts
-          </button>
-        </>
-      );
-    }
-
-    return (
-      <>
+  return (
+    <>
+      {path !== "/AdminMenu" && (
         <button
           onClick={() => navigate("/AdminMenu")}
           className="px-4 py-2 rounded-lg bg-white/20 backdrop-blur-md hover:bg-white/30 text-white font-medium transition"
         >
           Admin Menu
         </button>
+      )}
+
+      {path !== "/students" && (
         <button
           onClick={() => navigate("/students")}
           className="px-4 py-2 rounded-lg bg-white/20 backdrop-blur-md hover:bg-white/30 text-white font-medium transition"
         >
           Users
         </button>
-      </>
-    );
-  };
+      )}
+
+      {path !== "/post-report" && (
+        <button
+          onClick={() => navigate("/post-report")}
+          className="px-4 py-2 rounded-lg bg-white/20 backdrop-blur-md hover:bg-white/30 text-white font-medium transition"
+        >
+          Manage Posts
+        </button>
+      )}
+
+      {/* ✅ NEW: MATCHED ITEMS */}
+      {path !== "/matched-items" && (
+        <button
+          onClick={() => navigate("/matched-items")}
+          className="px-4 py-2 rounded-lg bg-white/20 backdrop-blur-md hover:bg-white/30 text-white font-medium transition"
+        >
+          Matched Items
+        </button>
+      )}
+
+      {/* ✅ NEW: CHAT MESSAGES */}
+      {path !== "/chat-msg" && (
+        <button
+          onClick={() => navigate("/chat-msg")}
+          className="px-4 py-2 rounded-lg bg-white/20 backdrop-blur-md hover:bg-white/30 text-white font-medium transition"
+        >
+          Chat Messages
+        </button>
+      )}
+    </>
+  );
+};
+
 
   // Student Links
   const renderStudentLinks = () => {

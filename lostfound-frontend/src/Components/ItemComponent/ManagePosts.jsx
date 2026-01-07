@@ -1,20 +1,22 @@
 // src/Components/ItemComponent/ManagePosts.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import LostItemReport from "./LostItemReport";
 import FoundItemReport from "./FoundItemReport";
 import Navbar from "../Layout/Navbar";
 
 const ManagePosts = () => {
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("lost");
+
+  // Common style for zoomed-out view
+  const zoomStyle = {
+    transform: "scale(0.85)", // Reduce size to 85%
+    transformOrigin: "top center", // Scale from top center
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
-      {/* Use the common Navbar */}
       <Navbar />
 
-      {/* Page Content */}
       <div
         className="p-6 rounded-2xl mt-6 mx-6"
         style={{
@@ -46,8 +48,10 @@ const ManagePosts = () => {
           </button>
         </div>
 
-        {/* Render selected tab */}
-        {activeTab === "lost" ? <LostItemReport /> : <FoundItemReport />}
+        {/* Zoomed-out Report */}
+        <div style={zoomStyle}>
+          {activeTab === "lost" ? <LostItemReport /> : <FoundItemReport />}
+        </div>
       </div>
     </div>
   );
