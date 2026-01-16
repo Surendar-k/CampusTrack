@@ -18,7 +18,7 @@ const AdminMenu = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    // Lost & Found counts
+   
     getCounts().then((res) => {
       setLostCount(res.data.lost);
       setFoundCount(res.data.found);

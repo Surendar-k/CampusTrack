@@ -107,7 +107,7 @@ const FoundItemReport = () => {
       {/* HEADER */}
       <div className="text-center mb-10">
         <h1 className="text-4xl md:text-5xl font-extrabold text-purple-800 drop-shadow-md">
-          {role === "Admin" ? "Admin Found Items" : "My Found Items"}
+          {role === "Admin" ? "List of Found Items" : "My Found Items"}
         </h1>
         <p className="text-purple-800/80 italic mt-2 md:mt-4 text-lg md:text-xl">
           Track found items and manage their status efficiently

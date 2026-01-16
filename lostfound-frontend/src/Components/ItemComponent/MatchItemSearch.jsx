@@ -8,163 +8,212 @@ import {
   User,
   Tag,
   MapPin,
-  Smartphone,
+  Laptop,
+  PackageSearch,
 } from "lucide-react";
 
 const MatchItemSearch = ({ lostItem, onClose }) => {
   const [foundItems, setFoundItems] = useState([]);
   const [matches, setMatches] = useState([]);
+const [showSuccess, setShowSuccess] = useState(false);
+const [claimedItemName, setClaimedItemName] = useState("");
 
   useEffect(() => {
     getAllFoundItems().then((res) => setFoundItems(res.data));
   }, []);
 
-  useEffect(() => {
-    if (!lostItem || foundItems.length === 0) return;
+useEffect(() => {
+  if (!lostItem || foundItems.length === 0) return;
 
-    const fuse = new Fuse(foundItems, {
-      keys: ["foundItemName", "category", "color", "brand"],
-      threshold: 0.4,
-    });
+  // ❌ Remove items posted by the same user
+  const filteredFoundItems = foundItems.filter(
+    (item) => item.username !== lostItem.username
+  );
 
-    setMatches(fuse.search(lostItem.lostItemName).map(r => r.item));
-  }, [lostItem, foundItems]);
+  const fuse = new Fuse(filteredFoundItems, {
+    keys: ["foundItemName", "category", "color", "brand"],
+    threshold: 10, // better matching (optional improvement)
+  });
 
-  const confirmMatch = (foundItem) => {
-    const matchDTO = {
-      lostItemId: lostItem.lostItemId,
-      foundItemId: foundItem.foundItemId,
-      itemName: lostItem.lostItemName,
-      category: lostItem.category,
-      lostUsername: lostItem.username,
-      foundUsername: foundItem.username,
-    };
+  setMatches(
+    fuse.search(lostItem.lostItemName).map((r) => r.item)
+  );
+}, [lostItem, foundItems]);
 
-    saveMatchItem(matchDTO).then(() => {
-      alert("Match saved successfully");
-      onClose();
-    });
+const confirmMatch = (foundItem) => {
+  const matchDTO = {
+    lostItemId: lostItem.lostItemId,
+    foundItemId: foundItem.foundItemId,
+    itemName: lostItem.lostItemName,
+    category: lostItem.category,
+    lostUsername: lostItem.username,
+    foundUsername: foundItem.username,
   };
+
+  saveMatchItem(matchDTO).then(() => {
+    setClaimedItemName(foundItem.foundItemName);
+    setShowSuccess(true);
+
+    // Auto close popup + modal
+    setTimeout(() => {
+      setShowSuccess(false);
+      onClose();
+    }, 2000);
+  });
+};
+
 
   if (!lostItem) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-2xl w-full max-w-3xl shadow-xl overflow-hidden font-sans">
+    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-[2px] flex items-center justify-center">
+      <div className="bg-slate-100 w-full max-w-6xl rounded-2xl shadow-xl
+                      max-h-[90vh] flex flex-col overflow-hidden">
 
         {/* HEADER */}
-        <div className="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4 flex justify-between items-center">
-          <div>
-            <h2 className="text-xl font-semibold tracking-wide text-white">
-              Match Results
-            </h2>
-            <p className="text-sm text-indigo-100">
-              Lost item: "{lostItem.lostItemName}"
-            </p>
+        <div className="flex items-center justify-between px-8 py-6 bg-white border-b">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-indigo-600">
+              <PackageSearch className="text-white" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-semibold text-slate-800">
+                Match Found Items
+              </h2>
+              <p className="text-base text-slate-500">
+                Smart similarity-based item comparison
+              </p>
+            </div>
           </div>
 
           <button
             onClick={onClose}
-            className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg transition"
+            className="p-2 rounded-lg hover:bg-slate-100 transition"
           >
-            <X size={18} />
+            <X size={22} />
           </button>
         </div>
 
-        {/* BODY */}
-        <div className="p-6">
+        {/* LOST ITEM CARD */}
+     <div className="bg-white rounded-xl shadow-sm p-6">
+  <div className="flex items-center gap-4 mb-4">
+    <div className="p-3 rounded-xl bg-indigo-100">
+      <Laptop className="text-indigo-600" />
+    </div>
+    <div>
+      <p className="text-sm text-slate-500 font-medium uppercase">
+        Lost Item
+      </p>
+      <h3 className="text-xl font-semibold text-slate-800">
+        {lostItem.lostItemName}
+      </h3>
+    </div>
+  </div>
+
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-base">
+    <div className="flex items-center gap-2 text-slate-700">
+      <Tag size={18} className="text-indigo-500" />
+      <span className="font-medium">Category:</span>
+      {lostItem.category}
+    </div>
+
+    <div className="flex items-center gap-2 text-slate-700">
+      🎨 <span className="font-medium">Color:</span>
+      {lostItem.color || "N/A"}
+    </div>
+
+    <div className="flex items-center gap-2 text-slate-700">
+      🏷 <span className="font-medium">Brand:</span>
+      {lostItem.brand || "N/A"}
+    </div>
+
+    <div className="flex items-center gap-2 text-slate-700">
+      <MapPin size={18} className="text-indigo-500" />
+      <span className="font-medium">Location:</span>
+      {lostItem.location || "N/A"}
+    </div>
+  </div>
+</div>
+
+<br />
+        {/* FOUND ITEMS */}
+        <div className="flex-1 overflow-y-auto px-8 pb-8">
           {matches.length === 0 ? (
-            <div className="text-center py-10 text-slate-500 text-sm">
-              No matching found items available.
+            <div className="flex flex-col items-center justify-center h-full text-slate-500">
+              <PackageSearch size={48} className="mb-4 opacity-40" />
+              <p className="text-lg">No matching found items</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {matches.map((found) => (
-                <div
-                  key={found.foundItemId}
-                  className="border border-slate-200 rounded-xl p-4
-                             hover:border-indigo-300 transition"
-                >
-                  {/* Item Title */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <Smartphone size={18} className="text-indigo-600" />
-                    <h3 className="text-base font-medium text-slate-800">
-                      {found.foundItemName}
-                    </h3>
-                  </div>
+                <div className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition">
+  <h4 className="text-xl font-semibold text-slate-800 mb-4">
+    {found.foundItemName}
+  </h4>
 
-                  {/* Details */}
-                  <div className="grid grid-cols-2 gap-y-3 text-sm">
-                    <div>
-                      <p className="text-[11px] uppercase tracking-wider text-slate-400">
-                        Found By
-                      </p>
-                      <p className="flex items-center gap-1 text-slate-700">
-                        <User size={14} /> {found.username}
-                      </p>
-                    </div>
+  <div className="grid grid-cols-2 gap-y-8 text-base text-slate-700">
+    <div className="col-span-2 flex items-center gap-2">
+      <User size={18} className="text-indigo-500" />
+      <span className="font-medium">Found By:</span>
+      {found.username}
+    </div>
 
-                    <div>
-                      <p className="text-[11px] uppercase tracking-wider text-slate-400">
-                        Category
-                      </p>
-                      <p className="flex items-center gap-1 text-slate-700">
-                        <Tag size={14} /> {found.category}
-                      </p>
-                    </div>
+    <div className="flex items-center gap-2">
+      <Tag size={18} className="text-indigo-500" />
+      <span className="font-medium">Category:</span>
+      {found.category}
+    </div>
 
-                    <div>
-                      <p className="text-[11px] uppercase tracking-wider text-slate-400">
-                        Color
-                      </p>
-                      <p className="text-slate-700">{found.color}</p>
-                    </div>
+    <div className="flex items-center gap-2">
+      🎨 <span className="font-medium">Color:</span>
+      {found.color}
+    </div>
 
-                    <div>
-                      <p className="text-[11px] uppercase tracking-wider text-slate-400">
-                        Brand
-                      </p>
-                      <p className="text-slate-700">{found.brand}</p>
-                    </div>
+    <div className="flex items-center gap-2">
+      🏷 <span className="font-medium">Brand:</span>
+      {found.brand}
+    </div>
 
-                    <div className="col-span-2">
-                      <p className="text-[11px] uppercase tracking-wider text-slate-400">
-                        Location
-                      </p>
-                      <p className="flex items-center gap-1 text-slate-700">
-                        <MapPin size={14} /> {found.location}
-                      </p>
-                    </div>
-                  </div>
+    <div className=" flex items-center gap-2">
+      <MapPin size={18} className="text-indigo-500" />
+      <span className="font-medium">Location:</span>
+      {found.location}
+    </div>
+  </div>
 
-                  {/* Confirm Button */}
-                  <button
-                    onClick={() => confirmMatch(found)}
-                    className="mt-4 w-full flex items-center justify-center gap-2
-                               bg-indigo-600 hover:bg-green-600
-                               text-white text-sm font-medium py-2 rounded-lg transition"
-                  >
-                    <CheckCircle size={16} />
-                    Confirm Match
-                  </button>
-                </div>
+  <button
+    onClick={() => confirmMatch(found)}
+    className="mt-6 w-full flex items-center justify-center gap-2
+               bg-indigo-600 hover:bg-indigo-700
+               text-white text-base font-semibold py-3
+               rounded-lg transition"
+  >
+    <CheckCircle size={18} />
+    Claim Item
+  </button>
+</div>
+
               ))}
             </div>
           )}
         </div>
 
-        {/* FOOTER */}
-        <div className="px-6 py-3 border-t flex justify-end">
-          <button
-            onClick={onClose}
-            className="px-5 py-2 text-sm font-medium rounded-lg
-                       bg-red-500 hover:bg-red-600
-                       text-white transition"
-          >
-            Close
-          </button>
-        </div>
       </div>
+      {/* ✅ Success Popup */}
+{showSuccess && (
+  <div className="fixed inset-0 z-[60] bg-black/40 flex items-center justify-center">
+    <div className="bg-white rounded-2xl p-8 shadow-2xl text-center w-96 animate-scale-in">
+      <CheckCircle size={50} className="text-green-600 mx-auto mb-4" />
+      <h3 className="text-2xl font-bold text-green-700 mb-2">
+        Item Claimed!
+      </h3>
+      <p className="text-slate-600">
+        <strong>{claimedItemName}</strong> has been successfully claimed.
+      </p>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

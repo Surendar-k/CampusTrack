@@ -14,12 +14,12 @@ import StudentList from "./Components/LoginComponent/StudentList";
 import ChatMessage from "./Components/MessageComponent/ChatMessage";
 import MatchedItemList from "./Components/ItemComponent/MatchedItemList";
 
-// Component to wrap Routes and scroll to top on route change
+
 const ScrollWrapper = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Scroll to top whenever the route changes
+    window.scrollTo(0, 0); 
   }, [location.pathname]);
 
   return children;

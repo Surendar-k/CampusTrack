@@ -108,7 +108,7 @@ const LostItemReport = () => {
       {/* HEADER */}
       <div className="text-center mb-10">
         <h1 className="text-4xl md:text-5xl font-extrabold text-purple-800 drop-shadow-md">
-          {role === "Admin" ? "Admin Lost Items" : "My Lost Items"}
+          {role === "Admin" ? "List of Lost Items" : "My Lost Items"}
         </h1>
         <p className="text-purple-800/80 italic mt-2 md:mt-4 text-lg md:text-xl">
           Track lost items and manage their status efficiently
@@ -123,7 +123,9 @@ const LostItemReport = () => {
           itemList.map((item) => (
             <div
               key={item.lostItemId}
-              className="bg-white rounded-3xl shadow-lg border hover:scale-105 transition"
+             className="bg-white rounded-3xl shadow-lg border
+           hover:shadow-2xl transition"
+
             >
               {/* HEADER */}
               <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-4 text-white rounded-t-3xl">
@@ -179,12 +181,22 @@ const LostItemReport = () => {
       </div>
 
       {/* MATCH SEARCH COMPONENT */}
-      {selectedLostItem && (
-        <MatchItemSearch
-          lostItem={selectedLostItem}
-          onClose={() => setSelectedLostItem(null)}
-        />
-      )}
+    {selectedLostItem && (
+  <MatchItemSearch
+    lostItem={selectedLostItem}
+    onClose={() => setSelectedLostItem(null)}
+    onMatched={(lostItemId) => {
+      setItemList((prev) =>
+        prev.map((item) =>
+          item.lostItemId === lostItemId
+            ? { ...item, status: true }   
+            : item
+        )
+      );
+    }}
+  />
+)}
+
 
       {/* RETURN */}
       <div className="mt-10 text-center">

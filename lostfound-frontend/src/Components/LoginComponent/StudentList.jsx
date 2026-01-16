@@ -20,14 +20,21 @@ const StudentList = () => {
     }
   };
 
-  const loadStudents = async () => {
-    try {
-      const response = await getAllStudents();
-      setStudents(response.data);
-    } catch (err) {
-      console.error("Error fetching users", err);
-    }
-  };
+const loadStudents = async () => {
+  try {
+    const response = await getAllStudents();
+
+    // ✅ Show ONLY students (hide Admins)
+    const onlyStudents = response.data.filter(
+      (user) => user.role === "Student"
+    );
+
+    setStudents(onlyStudents);
+  } catch (err) {
+    console.error("Error fetching users", err);
+  }
+};
+
 
   useEffect(() => {
     loadRole();
